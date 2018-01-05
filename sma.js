@@ -17,9 +17,6 @@ function getSID() {
     var cookiesArray = cookies.split(";");
     for (var i = 0; i < cookiesArray.length; i++) {
 
-      // TODO
-      console.log(i + ":" + cookiesArray[i]);
-
       // cookieに「_sid」があるか
       if (cookiesArray[i].indexOf("_sid=") > -1) {
         // cookieに「_sid」がある
