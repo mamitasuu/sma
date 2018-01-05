@@ -8,32 +8,35 @@ function getSID() {
   var cookies = document.cookie;
 
   if (cookies == "") {
-
     // cookieがない
     _sid = createSID();
 
   } else {
-
     var cookiesArray = cookies.split(";");
     for (var i = 0; i < cookiesArray.length; i++) {
 
       // cookieに「_sid」があるか
       if (cookiesArray[i].indexOf("_sid=") > -1) {
+
         // cookieに「_sid」がある
         var sid = cookiesArray[i].split("=")[1];
 
         if (sid == "" || sid == "null" || sid == "undefined") {
           // cookieに「_sid」はあるが、値がない
           _sid = createSID();
+
         } else {
           // cookieに「_sid」はある、値がある
           _sid = sid;
         }
-      } else {
-        // cookieに「_sid」がない
-        _sid = createSID();
       }
     }
+
+    if (_sid == "") {
+      // cookieに「_sid」がない
+      _sid = createSID();
+    }
+
   }
 
   // cookieに保存（新規作成 or 上書き）
