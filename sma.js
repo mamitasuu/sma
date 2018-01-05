@@ -2,39 +2,47 @@
  * クッキー情報を返却する
  * @return {string} クッキー情報
  */
-function getSID(){
+function getSID() {
 
-	var _sid;
-	var cookies = document.cookie;
+  var _sid;
+  var cookies = document.cookie;
 
-	if(cookies != ""){
-		var cookiesArray = cookies.split(";");
-		for (var i=0; i<cookiesArray.length; i++) {
-			// cookieにsidがあるか
-			if(cookiesArray[i].indexOf("_sid=") > -1){
-				// cookieにIDがある
-				var sid = cookiesArray[i].split("=")[1];
-				if(sid == "" || sid == "null" || sid == "undefined"){
-					// cookieにIDはあるが、値が無い
-					_sid = createSID();
-				}else{
-					// cookieにIDはある、値がある
-					_sid = sid;
-				}
-			}
-		}
-		if(_sid == ""){
-			// cookieにIDがない
-			_sid = createSID();
-		}
-	}else{
-		_sid = createSID();
-	}
+  if (cookies == "") {
 
-	// cookieに保存（新規作成 or 上書き）
-	document.cookie = "_sid=" + _sid
+    // cookieがない
+    _sid = createSID();
 
-	return _sid;
+  } else {
+
+    var cookiesArray = cookies.split(";");
+    for (var i = 0; i < cookiesArray.length; i++) {
+
+      // TODO
+      console.log(i + ":" + cookiesArray[i]);
+
+      // cookieに「_sid」があるか
+      if (cookiesArray[i].indexOf("_sid=") > -1) {
+        // cookieに「_sid」がある
+        var sid = cookiesArray[i].split("=")[1];
+
+        if (sid == "" || sid == "null" || sid == "undefined") {
+          // cookieに「_sid」はあるが、値がない
+          _sid = createSID();
+        } else {
+          // cookieに「_sid」はある、値がある
+          _sid = sid;
+        }
+      } else {
+        // cookieに「_sid」がない
+        _sid = createSID();
+      }
+    }
+  }
+
+  // cookieに保存（新規作成 or 上書き）
+  document.cookie = "_sid=" + _sid
+
+  return _sid;
 }
 
 /**
@@ -42,7 +50,7 @@ function getSID(){
  * @return {string} クッキー情報
  */
 function createSID() {
-	 return 'PS' + Math.floor(Math.random()*1000000000000);
+  return 'PS' + Math.floor(Math.random() * 1000000000000);
 }
 
 /**
@@ -52,21 +60,21 @@ function createSID() {
  */
 function getSRC(_p) {
 
-	var url = "https://www.pi-pe.co.jp/api/service/custom_program/run/request"
-	+ "?spiral_api_token=" + _p["tk"]
-	+ "&callback=onComplete"
-	+ "&title=scoreProgram"
-	+ "&arg=" + getSID()
-	+ "," + location.href
-	+ "," + document.title
-	+ "," + encodeURI(_p["sc"])
-	+ "," + encodeURI(_p["kem"])
-	+ "," + encodeURI(_p["cch"])
-	+ "," + encodeURI(_p["csp"])
-	+ "," + encodeURI(_p["mch"])
-	+ "," + encodeURI(_p["msp"]);
+  var url = "https://www.pi-pe.co.jp/api/service/custom_program/run/request" +
+    "?spiral_api_token=" + _p["tk"] +
+    "&callback=onComplete" +
+    "&title=scoreProgram" +
+    "&arg=" + getSID() +
+    "," + location.href +
+    "," + document.title +
+    "," + encodeURI(_p["sc"]) +
+    "," + encodeURI(_p["kem"]) +
+    "," + encodeURI(_p["cch"]) +
+    "," + encodeURI(_p["csp"]) +
+    "," + encodeURI(_p["mch"]) +
+    "," + encodeURI(_p["msp"]);
 
-	return url;
+  return url;
 }
 
 /**
@@ -75,15 +83,11 @@ function getSRC(_p) {
  * @param  {[type]} _result [description]
  * @return {[type]}         [description]
  */
-function onComplete(_result)
-{
- if (!_result || (_result.code != 0))
- {
-	var message = (_result && _result.message ? _result.message : '不明');
-	alert('実行に失敗しました。\n\n原因:\n' + message);
- }
- else
- {
-	alert('実行しました。\n\n出力:\n' + _result.output + '\n\nエラーメッセージ: \n' + _result.error_message);
- }
+function onComplete(_result) {
+  if (!_result || (_result.code != 0)) {
+    var message = (_result && _result.message ? _result.message : '不明');
+    alert('実行に失敗しました。\n\n原因:\n' + message);
+  } else {
+    alert('実行しました。\n\n出力:\n' + _result.output + '\n\nエラーメッセージ: \n' + _result.error_message);
+  }
 }
